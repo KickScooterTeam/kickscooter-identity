@@ -1,0 +1,18 @@
+server:
+  port: 8085
+token:
+  host: localhost
+  expiration: 45
+
+key:
+  privateKeyPath: classpath:keys/private_key.der
+  publicKeyPath: classpath:keys/public_key.der
+
+spring:
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${SQL_USERNAME}
+    password: ${SQL_PASSWORD}
+
+  liquibase:
+    change-log: classpath:db/changelog/master.xml
