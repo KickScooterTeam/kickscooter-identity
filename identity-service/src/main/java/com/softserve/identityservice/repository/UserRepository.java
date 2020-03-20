@@ -12,8 +12,9 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<AppUser, UUID> {
     Optional<AppUser> findByEmail(String email);
     boolean existsByEmail(String email);
+    Optional<AppUser> findByVerifyToken(UUID token);
     @Transactional
     @Modifying
-    @Query("update AppUser u set u.isBlocked=true where u.email = ?1")
+    @Query("update AppUser u set u.isBlocked=true where u.id = ?1")
     int updateBlockedStatus(UUID uuid);
 }

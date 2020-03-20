@@ -29,7 +29,7 @@ public class SignUpToUserConverter implements Converter<SignUpDto, AppUser> {
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
-        user.setBlocked(false);
+        user.setVerifyToken(UUID.randomUUID());
         user.setRole(role);
         return user;
     }

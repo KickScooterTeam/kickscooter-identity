@@ -11,10 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
+    private static final String LOGIN_PAGE_URL = "/sign-in";
+
     private final TokenService tokenService;
     private final ObjectMapper objectMapper;
     private final UserDetailsService userDetailsService;
@@ -26,10 +29,11 @@ public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
                 .cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/sign-up").permitAll()
+                .antMatchers("/sign-up", "/activate/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new AuthenticationFilter(authenticationManager(), tokenService, objectMapper))
+                .addFilterBefore(new AuthenticationFilter(LOGIN_PAGE_URL, tokenService, objectMapper,
+                        authenticationManager()), BasicAuthenticationFilter.class)
                 .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

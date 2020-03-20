@@ -51,7 +51,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             chain.doFilter(req, res);
         }
 
-        //Put make 'Authentication' object and put it into SecurityContextHolder.
+        //Make 'Authentication' object and put it into SecurityContextHolder.
         try {
             SecurityContextHolder.getContext().setAuthentication((tokenService.getAuthentication(token.substring(7))));
         } catch (Exception e) {

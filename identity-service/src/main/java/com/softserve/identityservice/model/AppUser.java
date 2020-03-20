@@ -28,6 +28,10 @@ public class AppUser {
     private String password;
     @Column(name = "blocked_status")
     private boolean isBlocked;
+    @Column(name = "is_verified")
+    private boolean isVerified;
+    @Column(name = "verify_token")
+    private UUID verifyToken;
     @CreatedDate
     private LocalDateTime created;
     @ElementCollection(fetch = FetchType.EAGER)
