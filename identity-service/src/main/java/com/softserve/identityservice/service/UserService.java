@@ -35,7 +35,7 @@ public class UserService {
     }
 
     @Transactional
-    public AppUser signUp(SignUpDto request) throws AuthorizationException {
+    public AppUser signUp(SignUpDto request){
         if(userRepository.existsByEmail(request.getEmail())){
             throw new AuthorizationException("User with a suchlike email already exist");
         }else{

@@ -1,10 +1,8 @@
 package com.softserve.identityservice.handler;
 
-import com.softserve.identityservice.exception.AuthorizationException;
 import com.softserve.identityservice.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.ServletException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -29,5 +28,12 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .time(LocalDateTime.now()).status(500).error(e.getMessage()).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public ResponseEntity<ErrorResponse> sqlServerError(Exception e, WebRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .time(LocalDateTime.now()).status(400).error(e.getMessage()).build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
