@@ -3,6 +3,7 @@ package com.softserve.identityservice.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserve.identityservice.model.SignInDto;
 import com.softserve.identityservice.service.TokenService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 

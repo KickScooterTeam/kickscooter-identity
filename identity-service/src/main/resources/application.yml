@@ -3,6 +3,10 @@ server:
 token:
   host: localhost
   expiration: 45
+kafka:
+  server: localhost:9092
+  producer:
+    id: identityProducer
 
 key:
   privateKeyPath: classpath:keys/private_key.der

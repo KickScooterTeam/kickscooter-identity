@@ -1,12 +1,16 @@
 package com.softserve.identityservice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softserve.identityservice.converter.AppUserDtoToEmailVerificationDtoConverter;
 import com.softserve.identityservice.converter.SignUpToUserConverter;
 import com.softserve.identityservice.exception.AuthorizationException;
 import com.softserve.identityservice.model.AppUser;
+import com.softserve.identityservice.model.EmailVerificationDto;
 import com.softserve.identityservice.model.SignInDto;
 import com.softserve.identityservice.model.SignUpDto;
 import com.softserve.identityservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,10 +24,11 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final SignUpToUserConverter converter;
+    private final SignUpToUserConverter userConverter;
+    private final AppUserDtoToEmailVerificationDtoConverter emailVerificationDtoConverter;
     private final TokenService tokenService;
+    private final KafkaTemplate<UUID, EmailVerificationDto> emailVerificationDtoKafkaTemplate;
 
-    //todo: Add exception handlers
     @Transactional
     public AppUser signIn(SignInDto request){
         AppUser user = userRepository.findByEmail(request.getEmail())
@@ -39,7 +44,9 @@ public class UserService {
         if(userRepository.existsByEmail(request.getEmail())){
             throw new AuthorizationException("User with a suchlike email already exist");
         }else{
-            return userRepository.save(converter.convert(request));
+            AppUser appUser = userConverter.convert(request);
+            sendVerificationEmail(emailVerificationDtoConverter.convert(appUser));
+            return userRepository.save(appUser);
         }
     }
 
@@ -59,5 +66,9 @@ public class UserService {
         }else{
             return resultOfUpdating;
         }
+    }
+
+    private void sendVerificationEmail(EmailVerificationDto emailVerificationDto){
+        emailVerificationDtoKafkaTemplate.send("email.verification", emailVerificationDto);
     }
 }
