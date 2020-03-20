@@ -18,14 +18,14 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponse> userNotFoundException(Exception e, WebRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .time(LocalDateTime.now()).status(400).error(e.getMessage()).build();
+                .time(LocalDateTime.now()).error(e.getMessage()).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(ServletException.class)
     public ResponseEntity<ErrorResponse> servletException(Exception e, WebRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .time(LocalDateTime.now()).status(500).error(e.getMessage()).build();
+                .time(LocalDateTime.now()).error(e.getMessage()).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -13,6 +13,5 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ErrorResponse {
     private LocalDateTime time;
-    private int status;
     private String error;
 }

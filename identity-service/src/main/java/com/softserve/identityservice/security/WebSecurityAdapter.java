@@ -32,9 +32,9 @@ public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sign-up", "/activate/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
                 .addFilterBefore(new AuthenticationFilter(LOGIN_PAGE_URL, tokenService, objectMapper,
                         authenticationManager()), BasicAuthenticationFilter.class)
-                .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

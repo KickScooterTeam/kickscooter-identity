@@ -1,9 +1,9 @@
 package com.softserve.identityservice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.softserve.identityservice.model.ErrorResponse;
 import com.softserve.identityservice.model.SignInDto;
 import com.softserve.identityservice.service.TokenService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter {
@@ -57,5 +58,14 @@ public class AuthenticationFilter extends AbstractAuthenticationProcessingFilter
         String accessToken =
                 tokenService.createToken(((User) authResult.getPrincipal()).getUsername(), authResult.getAuthorities());
         response.addHeader("Authorization", accessToken);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        PrintWriter writer = response.getWriter();
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .time(LocalDateTime.now())
+                .error(failed.getMessage()).build();
+        writer.println(objectMapper.writeValueAsString(errorResponse));
     }
 }
