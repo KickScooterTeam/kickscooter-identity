@@ -39,18 +39,6 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        //There we verify our token for time expire.
-        //For more details visit: https://mkyong.com/java/how-to-compare-dates-in-java/
-        try {
-            if (Date.from(Instant.now()).compareTo(tokenService.getExpirationTime(token.substring(7))) > 0) {
-                token = tokenService.createToken(tokenService.getClaims(token.substring(7)).getSubject(),
-                        new ObjectMapper().readValue(((String) tokenService.getClaims(token.substring(7))
-                                .getClaim("role")), new TypeReference<List<Role>>() {}));
-            }
-        }catch (ParseException e){
-            chain.doFilter(req, res);
-        }
-
         //Make 'Authentication' object and put it into SecurityContextHolder.
         try {
             SecurityContextHolder.getContext().setAuthentication((tokenService.getAuthentication(token.substring(7))));
