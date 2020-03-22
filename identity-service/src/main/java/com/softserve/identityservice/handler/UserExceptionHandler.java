@@ -10,7 +10,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.ServletException;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -19,21 +18,14 @@ public class UserExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponse> userNotFoundException(Exception e, WebRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .time(LocalDateTime.now()).status(400).error(e.getMessage()).build();
+                .time(LocalDateTime.now()).error(e.getMessage()).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(ServletException.class)
     public ResponseEntity<ErrorResponse> servletException(Exception e, WebRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .time(LocalDateTime.now()).status(500).error(e.getMessage()).build();
+                .time(LocalDateTime.now()).error(e.getMessage()).build();
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler(SQLException.class)
-    public ResponseEntity<ErrorResponse> sqlServerError(Exception e, WebRequest request){
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .time(LocalDateTime.now()).status(400).error(e.getMessage()).build();
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
