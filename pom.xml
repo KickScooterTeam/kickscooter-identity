@@ -12,6 +12,5 @@
     <modules>
         <module>identity-starter</module>
         <module>identity-service</module>
-        <module>starter</module>
     </modules>
 </project>

@@ -2,6 +2,8 @@ package com.softserve.identityservice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.softserve.identityservice.service.TokenService;
+import com.softserve.identitystarter.filter.AuthorizationFilter;
+import com.softserve.identitystarter.service.CheckingTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,7 +34,6 @@ public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
                 .antMatchers("/sign-up", "/activate/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new AuthorizationFilter(authenticationManager(),tokenService))
                 .addFilterBefore(new AuthenticationFilter(LOGIN_PAGE_URL, tokenService, objectMapper,
                         authenticationManager()), BasicAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

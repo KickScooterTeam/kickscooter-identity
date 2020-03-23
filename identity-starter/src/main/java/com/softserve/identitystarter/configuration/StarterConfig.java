@@ -2,12 +2,12 @@ package com.softserve.identitystarter.configuration;
 
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
@@ -16,18 +16,18 @@ import java.security.spec.X509EncodedKeySpec;
 
 @Configuration
 public class StarterConfig {
-    @Value("${key.public}")
-    private String path;
+    private final String PATH = "key/public_key.der";
 
     @Bean
     public RSAPublicKey getPublicKey() throws Exception {
-        Resource resource = new ClassPathResource(path);
-        byte[] keyBytes = Files.readAllBytes(Paths.get(resource.getURI()));
-
-        X509EncodedKeySpec spec =
-                new X509EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return (RSAPublicKey) kf.generatePublic(spec);
+        try(InputStream inputStream = new ClassPathResource(PATH).getInputStream()) {
+            byte[] keyBytes = new byte[inputStream.available()];
+            inputStream.read(keyBytes);
+            X509EncodedKeySpec spec =
+                    new X509EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            return (RSAPublicKey) kf.generatePublic(spec);
+        }
     }
 
     @Bean

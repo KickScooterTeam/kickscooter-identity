@@ -5,27 +5,27 @@ import com.nimbusds.jose.JWSVerifier;
 import com.softserve.identitystarter.filter.AuthorizationFilter;
 import com.softserve.identitystarter.service.CheckingTokenService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableAutoConfiguration
+@ConditionalOnClass({AuthorizationFilter.class,CheckingTokenService.class})
 @RequiredArgsConstructor
 public class StarterAutoConfiguration {
     private final ObjectMapper objectMapper;
     private final JWSVerifier verifier;
 
-    //todo: Delete all useless dependencies from identity-service
-    //todo: Add this starter to POM starter
-    //todo: Build this project
+    @Bean
     @ConditionalOnMissingBean(CheckingTokenService.class)
     public CheckingTokenService checkingTokenService(){
         return new CheckingTokenService(verifier, objectMapper);
     }
 
+    @Bean
     @ConditionalOnMissingBean(AuthorizationFilter.class)
-    public AuthorizationFilter authorizationFilter(){
-        return new AuthorizationFilter(checkingTokenService());
+    public AuthorizationFilter authorizationFilter(CheckingTokenService checkingTokenService){
+        return new AuthorizationFilter(checkingTokenService);
     }
 }

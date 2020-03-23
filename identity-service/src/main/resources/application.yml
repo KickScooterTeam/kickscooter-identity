@@ -10,7 +10,6 @@ kafka:
 
 key:
   privateKeyPath: classpath:keys/private_key.der
-  publicKeyPath: classpath:keys/public_key.der
 
 spring:
   datasource:

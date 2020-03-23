@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com/softserve/identitystarter/configuration/StarterConfig, \
+com/softserve/identitystarter/StarterAutoConfiguration
