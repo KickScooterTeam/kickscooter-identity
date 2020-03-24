@@ -32,4 +32,9 @@ public class UserController {
     public ResponseEntity<Long> blockUser(@PathVariable UUID id){
         return ResponseEntity.ok(userService.blockUser(id));
     }
+
+    @GetMapping("/hello")
+    public String hello(){
+        return "Hello";
+    }
 }

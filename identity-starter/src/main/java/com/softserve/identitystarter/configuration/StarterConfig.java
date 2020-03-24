@@ -5,11 +5,8 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
@@ -21,8 +18,7 @@ public class StarterConfig {
     @Bean
     public RSAPublicKey getPublicKey() throws Exception {
         try(InputStream inputStream = new ClassPathResource(PATH).getInputStream()) {
-            byte[] keyBytes = new byte[inputStream.available()];
-            inputStream.read(keyBytes);
+            byte[] keyBytes = inputStream.readAllBytes();
             X509EncodedKeySpec spec =
                     new X509EncodedKeySpec(keyBytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");

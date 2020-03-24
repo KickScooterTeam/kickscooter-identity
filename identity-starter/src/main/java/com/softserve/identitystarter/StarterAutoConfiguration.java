@@ -22,10 +22,4 @@ public class StarterAutoConfiguration {
     public CheckingTokenService checkingTokenService(){
         return new CheckingTokenService(verifier, objectMapper);
     }
-
-    @Bean
-    @ConditionalOnMissingBean(AuthorizationFilter.class)
-    public AuthorizationFilter authorizationFilter(CheckingTokenService checkingTokenService){
-        return new AuthorizationFilter(checkingTokenService);
-    }
 }
