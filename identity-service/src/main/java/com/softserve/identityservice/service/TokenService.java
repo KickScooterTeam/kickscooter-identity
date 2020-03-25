@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.Date;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +24,10 @@ public class TokenService {
     private final JWSSigner signer;
     private final ObjectMapper objectMapper;
 
-    public String createToken(String email, Collection<? extends GrantedAuthority> roles) throws ServletException {
+    public String createToken(String userId, Collection<? extends GrantedAuthority> roles) throws ServletException {
         try {
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(email)
+                    .subject(userId)
                     .issuer(tokenConfiguration.getHost())
                     .claim("role", objectMapper.writeValueAsString(roles))
                     .expirationTime(Date.from(Instant.now().plus(tokenConfiguration.getExpiration(),

@@ -23,11 +23,11 @@ public class CheckingTokenService {
         SignedJWT jwt = SignedJWT.parse(token);
         JWTClaimsSet claimsSet = jwt.getJWTClaimsSet();
         if(jwt.verify(verifier)){
-            String email = claimsSet.getSubject();
+            String userId = claimsSet.getSubject();
             List<Role> roles = objectMapper.readValue(((String) claimsSet.getClaim("role")),
                     new TypeReference<>() {});
             return AuthenticationImpl.builder()
-                    .email(email)
+                    .userId(userId)
                     .roles(roles)
                     .authenticated(true)
                     .build();

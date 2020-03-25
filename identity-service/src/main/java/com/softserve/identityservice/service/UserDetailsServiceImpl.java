@@ -19,12 +19,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         AppUser user = userRepository.findByEmail(email).orElseThrow(() ->
                 new UsernameNotFoundException("User with email " + email + " doesn't exists"));
         if(!user.isVerified()){
-            return new User(user.getEmail(), user.getPassword(), false, true,
+            return new User(user.getId().toString(), user.getPassword(), false, true,
                     true, true, user.getRole());
         }else if(user.isBlocked()){
-            return new User(user.getEmail(), user.getPassword(),false, false,
+            return new User(user.getId().toString(), user.getPassword(),false, false,
                     false,false, user.getRole());
         }
-        return new User(user.getEmail(), user.getPassword(), user.getRole());
+        return new User(user.getId().toString(), user.getPassword(), user.getRole());
     }
 }

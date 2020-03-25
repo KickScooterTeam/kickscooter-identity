@@ -44,7 +44,7 @@ public class UserService {
         AppUser user = userRepository.findByVerifyToken(token).orElseThrow(() ->
                 new UsernameNotFoundException("Incorrect token"));
         user.setVerified(true);
-        return tokenService.createToken(user.getEmail(), user.getRole());
+        return tokenService.createToken(user.getId().toString(), user.getRole());
     }
 
     @Transactional
