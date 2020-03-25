@@ -2,6 +2,7 @@ package com.softserve.identityservice.controller;
 
 import com.softserve.identityservice.model.AppUser;
 import com.softserve.identityservice.model.SignUpDto;
+import com.softserve.identityservice.model.UserInfoResponse;
 import com.softserve.identityservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class UserController {
     @GetMapping("/activate/{token}")
     public ResponseEntity<Void> verifyAccount(@PathVariable UUID token) throws ServletException {
         userService.activateAccount(token);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("/admin/block/{id}")
@@ -33,8 +34,8 @@ public class UserController {
         return ResponseEntity.ok(userService.blockUser(id));
     }
 
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello";
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserInfoResponse> userResponse(@PathVariable UUID id){
+        return ResponseEntity.ok(userService.userInfo(id));
     }
 }
