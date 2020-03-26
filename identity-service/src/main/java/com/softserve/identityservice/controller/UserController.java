@@ -36,13 +36,8 @@ public class UserController {
         return ResponseEntity.ok(userService.blockUser(id));
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public ResponseEntity<UserInfoResponse> userResponse(@PathVariable UUID id){
         return ResponseEntity.ok(userService.userInfo(id));
-    }
-
-    @GetMapping("/hello")
-    public Principal hello(){
-        return SecurityContextHolder.getContext().getAuthentication();
     }
 }
