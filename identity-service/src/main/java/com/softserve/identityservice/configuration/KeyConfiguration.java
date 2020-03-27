@@ -27,14 +27,4 @@ public class KeyConfiguration {
         KeyFactory kf = KeyFactory.getInstance("RSA");
         return kf.generatePrivate(spec);
     }
-
-    @Bean
-    public RSAPublicKey getPublicKey() throws Exception {
-        byte[] keyBytes = Files.readAllBytes(Paths.get(keyConfiguration.getPublicKeyPath().getURI()));
-
-        X509EncodedKeySpec spec =
-                new X509EncodedKeySpec(keyBytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return (RSAPublicKey) kf.generatePublic(spec);
-    }
 }

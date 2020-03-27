@@ -2,10 +2,12 @@ package com.softserve.identityservice.service;
 
 import com.softserve.identityservice.converter.AppUserDtoToEmailVerificationDtoConverter;
 import com.softserve.identityservice.converter.SignUpToUserConverter;
+import com.softserve.identityservice.converter.UserToUserInfo;
 import com.softserve.identityservice.exception.AuthorizationException;
 import com.softserve.identityservice.model.AppUser;
 import com.softserve.identityservice.model.EmailVerificationDto;
 import com.softserve.identityservice.model.SignUpDto;
+import com.softserve.identityservice.model.UserInfoResponse;
 import com.softserve.identityservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,6 +24,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final SignUpToUserConverter userConverter;
     private final AppUserDtoToEmailVerificationDtoConverter emailVerificationDtoConverter;
+    private final UserToUserInfo userToUserInfoConverter;
     private final TokenService tokenService;
     private final KafkaTemplate<UUID, EmailVerificationDto> emailVerificationDtoKafkaTemplate;
 
@@ -41,7 +44,7 @@ public class UserService {
         AppUser user = userRepository.findByVerifyToken(token).orElseThrow(() ->
                 new UsernameNotFoundException("Incorrect token"));
         user.setVerified(true);
-        return tokenService.createToken(user.getEmail(), user.getRole());
+        return tokenService.createToken(user.getId().toString(), user.getRole());
     }
 
     @Transactional
@@ -52,6 +55,13 @@ public class UserService {
         }else{
             return resultOfUpdating;
         }
+    }
+
+    @Transactional
+    public UserInfoResponse userInfo(UUID id){
+        AppUser user = userRepository.findById(id).orElseThrow(() ->
+                new UsernameNotFoundException("User doesn't exist"));
+        return userToUserInfoConverter.convert(user);
     }
 
     private void sendVerificationEmail(EmailVerificationDto emailVerificationDto){

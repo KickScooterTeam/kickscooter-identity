@@ -1,6 +1,5 @@
-package com.softserve.identityservice.security;
+package com.softserve.identitystarter.model;
 
-import com.softserve.identityservice.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthenticationImpl implements Authentication {
     private boolean authenticated;
-    private String email;
+    private String userId;
     private String password;
     private List<Role> roles;
 
-    public AuthenticationImpl(String email, String password, List<Role> roles) {
-        this.email = email;
+    public AuthenticationImpl(String userId, String password, List<Role> roles) {
+        this.userId = userId;
         this.password = password;
         this.roles = roles;
     }
@@ -32,7 +31,7 @@ public class AuthenticationImpl implements Authentication {
 
     @Override
     public Object getCredentials() {
-        return email;
+        return userId;
     }
 
     @Override
@@ -57,6 +56,6 @@ public class AuthenticationImpl implements Authentication {
 
     @Override
     public String getName() {
-        return email;
+        return userId;
     }
 }

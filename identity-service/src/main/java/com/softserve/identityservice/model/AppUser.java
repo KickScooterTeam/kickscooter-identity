@@ -1,5 +1,6 @@
 package com.softserve.identityservice.model;
 
+import com.softserve.identitystarter.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

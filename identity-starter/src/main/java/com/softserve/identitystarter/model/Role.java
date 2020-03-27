@@ -1,4 +1,4 @@
-package com.softserve.identityservice.model;
+package com.softserve.identitystarter.model;
 
 import org.springframework.security.core.GrantedAuthority;
 

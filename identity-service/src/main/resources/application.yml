@@ -3,14 +3,9 @@ server:
 token:
   host: localhost
   expiration: 45
-kafka:
-  server: localhost:9092
-  producer:
-    id: identityProducer
 
 key:
   privateKeyPath: classpath:keys/private_key.der
-  publicKeyPath: classpath:keys/public_key.der
 
 spring:
   datasource:
@@ -20,3 +15,13 @@ spring:
 
   liquibase:
     change-log: classpath:db/changelog/master.xml
+
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVER}
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.LongSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: >
+          validation: com.softserve.identityservice.model.EmailVerificationDto

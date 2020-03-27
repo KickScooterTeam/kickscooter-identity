@@ -4,6 +4,7 @@ import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
+import com.softserve.identitystarter.service.CheckingTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +18,6 @@ import java.security.interfaces.RSAPublicKey;
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
     private final PrivateKey privateKey;
-    private final RSAPublicKey publicKey;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -27,10 +27,5 @@ public class ApplicationConfiguration {
     @Bean
     public JWSSigner signer(){
         return new RSASSASigner(privateKey);
-    }
-
-    @Bean
-    public JWSVerifier verifier(){
-        return new RSASSAVerifier(publicKey);
     }
 }

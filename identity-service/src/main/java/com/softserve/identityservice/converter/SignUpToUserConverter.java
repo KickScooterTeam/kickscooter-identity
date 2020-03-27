@@ -1,8 +1,8 @@
 package com.softserve.identityservice.converter;
 
 import com.softserve.identityservice.model.AppUser;
-import com.softserve.identityservice.model.Role;
 import com.softserve.identityservice.model.SignUpDto;
+import com.softserve.identitystarter.model.Role;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.converter.Converter;
