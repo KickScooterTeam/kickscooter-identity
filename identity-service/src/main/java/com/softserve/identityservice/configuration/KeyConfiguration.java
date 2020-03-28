@@ -18,13 +18,11 @@ import java.security.spec.X509EncodedKeySpec;
 @Configuration
 @RequiredArgsConstructor
 public class KeyConfiguration {
-    //todo: change KeyConfig privateKey to String
     private final KeyConfigurationProperties keyConfiguration;
-    private static final String PATH = "keys/private_key.der";
 
     @Bean
     public PrivateKey getPrivateKey() throws Exception {
-        try(InputStream inputStream = new ClassPathResource(PATH).getInputStream()) {
+        try(InputStream inputStream = new ClassPathResource(keyConfiguration.getPrivateKeyPath()).getInputStream()) {
             byte[] keyBytes = inputStream.readAllBytes();
             PKCS8EncodedKeySpec spec =
                     new PKCS8EncodedKeySpec(keyBytes);
