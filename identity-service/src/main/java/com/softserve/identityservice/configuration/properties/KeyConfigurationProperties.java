@@ -10,5 +10,4 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("key")
 public class KeyConfigurationProperties {
     private Resource privateKeyPath;
-    private Resource publicKeyPath;
 }
