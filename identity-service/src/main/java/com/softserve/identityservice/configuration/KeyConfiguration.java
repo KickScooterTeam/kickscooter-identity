@@ -4,7 +4,9 @@ import com.softserve.identityservice.configuration.properties.KeyConfigurationPr
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
@@ -20,11 +22,12 @@ public class KeyConfiguration {
 
     @Bean
     public PrivateKey getPrivateKey() throws Exception {
-        byte[] bytes = Files.readAllBytes(Paths.get(keyConfiguration.getPrivateKeyPath().getURI()));
-
-        PKCS8EncodedKeySpec spec =
-                new PKCS8EncodedKeySpec(bytes);
-        KeyFactory kf = KeyFactory.getInstance("RSA");
-        return kf.generatePrivate(spec);
+        try(InputStream inputStream = new ClassPathResource(keyConfiguration.getPrivateKeyPath()).getInputStream()) {
+            byte[] keyBytes = inputStream.readAllBytes();
+            PKCS8EncodedKeySpec spec =
+                    new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory kf = KeyFactory.getInstance("RSA");
+            return kf.generatePrivate(spec);
+        }
     }
 }
