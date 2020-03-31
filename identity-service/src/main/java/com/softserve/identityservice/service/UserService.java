@@ -10,6 +10,7 @@ import com.softserve.identityservice.model.SignUpDto;
 import com.softserve.identityservice.model.UserInfoResponse;
 import com.softserve.identityservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final SignUpToUserConverter userConverter;
@@ -29,10 +31,10 @@ public class UserService {
     private final KafkaTemplate<UUID, EmailVerificationDto> emailVerificationDtoKafkaTemplate;
 
     @Transactional
-    public AppUser signUp(SignUpDto request){
-        if(userRepository.existsByEmail(request.getEmail())){
+    public AppUser signUp(SignUpDto request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new AuthorizationException("User with a suchlike email already exist");
-        }else{
+        } else {
             AppUser appUser = userConverter.convert(request);
             sendVerificationEmail(emailVerificationDtoConverter.convert(appUser));
             return userRepository.save(appUser);
@@ -48,23 +50,25 @@ public class UserService {
     }
 
     @Transactional
-    public long blockUser(UUID id){
+    public long blockUser(UUID id) {
         int resultOfUpdating = userRepository.updateBlockedStatus(id);
-        if(resultOfUpdating == 0){
+        if (resultOfUpdating == 0) {
             throw new UsernameNotFoundException("User with the id " + id + " doesn't exist");
-        }else{
+        } else {
             return resultOfUpdating;
         }
     }
 
     @Transactional
-    public UserInfoResponse userInfo(UUID id){
+    public UserInfoResponse userInfo(UUID id) {
         AppUser user = userRepository.findById(id).orElseThrow(() ->
                 new UsernameNotFoundException("User doesn't exist"));
         return userToUserInfoConverter.convert(user);
     }
 
-    private void sendVerificationEmail(EmailVerificationDto emailVerificationDto){
-        emailVerificationDtoKafkaTemplate.send("email.verification", emailVerificationDto);
+    private void sendVerificationEmail(EmailVerificationDto emailVerificationDto) {
+        String topic = "email-verification";
+        emailVerificationDtoKafkaTemplate.send(topic, emailVerificationDto);
+        log.info("sent verification to {}", topic);
     }
 }
