@@ -10,9 +10,9 @@ spring:
     name: identity-service
 
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${SQL_USERNAME}
-    password: ${SQL_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   liquibase:
     change-log: classpath:db/changelog/master.xml
