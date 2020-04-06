@@ -29,9 +29,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/admin/block/{id}")
-    public ResponseEntity<Long> blockUser(@PathVariable UUID id){
-        return ResponseEntity.ok(userService.blockUser(id));
+    @PutMapping("/admin/users/{userId}/block")
+    public ResponseEntity<Long> blockUser(@PathVariable UUID userId){
+        return ResponseEntity.ok(userService.blockUser(userId));
     }
 
     @GetMapping("/users/{id}")
