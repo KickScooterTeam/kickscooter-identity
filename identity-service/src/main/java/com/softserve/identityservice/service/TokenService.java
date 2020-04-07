@@ -33,7 +33,7 @@ public class TokenService {
                     .issuer(tokenConfiguration.getHost())
                     .claim("role", objectMapper.writeValueAsString(roles))
                     .expirationTime(Date.from(Instant.now().plus(tokenConfiguration.getExpiration(),
-                            ChronoUnit.MONTHS)))
+                            ChronoUnit.DAYS)))
                     .build();
             SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.RS256), claimsSet);
             signedJWT.sign(signer);
