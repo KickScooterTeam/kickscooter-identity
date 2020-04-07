@@ -1,6 +1,6 @@
 token:
   host: localhost
-  expiration: 45
+  expiration: 3
 
 key:
   privateKeyPath: keys/private_key.der
