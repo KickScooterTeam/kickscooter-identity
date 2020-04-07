@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/accounts")
 public class UserController {
     private final UserService userService;
 
@@ -34,7 +35,7 @@ public class UserController {
         return ResponseEntity.ok(userService.blockUser(userId));
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserInfoResponse> userResponse(@PathVariable UUID id){
         return ResponseEntity.ok(userService.userInfo(id));
     }
