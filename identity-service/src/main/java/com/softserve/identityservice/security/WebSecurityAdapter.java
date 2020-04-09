@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Order(1)
 @RequiredArgsConstructor
 public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
-    private static final String LOGIN_PAGE_URL = "/sign-in";
+    private static final String LOGIN_PAGE_URL = "/accounts/sign-in";
 
     private final TokenService tokenService;
     private final ObjectMapper objectMapper;
@@ -33,8 +33,8 @@ public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
         http
                 .cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/sign-up", "/activate/**").permitAll()
+                .antMatchers("/accounts/admin/**").hasRole("ADMIN")
+                .antMatchers("/accounts/sign-up", "/accounts/activate/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterAt(new AuthorizationFilter(checkingTokenService), BasicAuthenticationFilter.class)
@@ -49,7 +49,7 @@ public class WebSecurityAdapter extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers("/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",

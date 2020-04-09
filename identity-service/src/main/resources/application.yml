@@ -1,15 +1,18 @@
 token:
   host: localhost
-  expiration: 45
+  expiration: 90
 
 key:
-  privateKeyPath: classpath:keys/private_key.der
+  privateKeyPath: keys/private_key.der
 
 spring:
+  application:
+    name: identity-service
+
   datasource:
-    url: ${DATASOURCE_URL}
-    username: ${SQL_USERNAME}
-    password: ${SQL_PASSWORD}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
 
   liquibase:
     change-log: classpath:db/changelog/master.xml
@@ -23,3 +26,8 @@ spring:
       properties:
         spring.json.type.mapping: >
           validation: com.softserve.identityservice.model.EmailVerificationDto
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_SERVER}/eureka/

@@ -7,18 +7,26 @@ import com.softserve.identityservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/accounts")
 public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<UUID> signUp(@RequestBody SignUpDto request){
+    public ResponseEntity<UUID> signUp(@RequestBody SignUpDto request) {
         AppUser user = userService.signUp(request);
         return ResponseEntity.ok(user.getVerifyToken());
     }
@@ -29,13 +37,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PutMapping("/admin/block/{id}")
-    public ResponseEntity<Long> blockUser(@PathVariable UUID id){
-        return ResponseEntity.ok(userService.blockUser(id));
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/admin/users/{userId}/block")
+    public ResponseEntity<Long> blockUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userService.blockUser(userId));
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserInfoResponse> userResponse(@PathVariable UUID id){
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserInfoResponse> userResponse(@PathVariable UUID id) {
         return ResponseEntity.ok(userService.userInfo(id));
     }
 }
