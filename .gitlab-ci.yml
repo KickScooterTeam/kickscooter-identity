@@ -16,4 +16,6 @@ deploy:
   stage: deploy
   script:
     - scp -r /home/env docker-compose.yml deploy.sh $USERNAME@$IP:/var/kick-scooter
+  after_script:
+    - docker image prune -a -f &>/dev/null
   when: manual
