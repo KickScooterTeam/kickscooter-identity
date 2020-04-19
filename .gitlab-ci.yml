@@ -1,0 +1,19 @@
+---
+stages:
+  - build
+  - deploy
+  
+build:
+  stage: build
+  script:
+    - cd identity-starter && mvn clean install
+    - cd ../identity-service && mvn clean package
+    - sudo docker build -t gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity .
+    - sudo docker push gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity
+  when: manual
+
+deploy:
+  stage: deploy
+  script:
+    - scp -r /home/env docker-compose.yml deploy.sh $USERNAME@$IP:/var/kick-scooter
+  when: manual
