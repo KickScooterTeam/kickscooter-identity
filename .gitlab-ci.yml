@@ -8,6 +8,8 @@ build:
   script:
     - cd identity-starter && mvn clean install
     - cd ../identity-service && mvn clean package
+    - cat Dockerfile | sed -e "s/-hidden_access_id-/$SUMOLOGIC_ACCESS_ID/; s/-hidden_access_key-/$SUMOLOGIC_ACCESS_KEY/" > ./Dockerfile_changed
+    - sudo mv ./Dockerfile_changed ./Dockerfile    
     - sudo docker build -t gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity .
     - sudo docker push gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity
   when: manual
