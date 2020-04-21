@@ -17,7 +17,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - ssh $USERNAME@$IP "bash /var/deploy.sh"
+    - ssh $USERNAME@$IP "cd /var/ && sudo bash /var/deploy.sh"
   after_script:
     - docker image prune -a -f &>/dev/null
   when: manual
