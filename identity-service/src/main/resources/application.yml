@@ -31,3 +31,7 @@ eureka:
   client:
     service-url:
       defaultZone: http://${EUREKA_SERVER}/eureka/
+
+logging:
+  file:
+    path: /var/log/messages
