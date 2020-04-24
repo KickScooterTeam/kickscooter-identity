@@ -1,0 +1,20 @@
+---
+stages:
+  - build
+  - deploy
+  
+build:
+  stage: build
+  script:
+    - cp /home/sumo_credentials.txt ./identity-service/sumo_credentials.txt   
+    - cd identity-starter && mvn clean install
+    - cd ../identity-service && mvn clean package
+    - sudo docker build -t gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity .
+    - sudo docker push gitlab.sslsecure.website:5050/root/kick-scooter-trip:identity
+
+deploy:
+  stage: deploy
+  script:
+    - ssh $USERNAME@$IP "cd /var/ && sudo bash /var/deploy.sh"
+  after_script:
+    - docker image prune -a -f &>/dev/null

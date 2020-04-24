@@ -1,0 +1,9 @@
+{
+  "api.version":"v1",
+  "source":{
+     "sourceType":"LocalFile",
+     "name":"identity",
+     "pathExpression":"/var/log/identity/spring.log",
+     "blacklist":[]
+  }
+}

@@ -34,4 +34,4 @@ eureka:
 
 logging:
   file:
-    path: /var/log/messages
+    path: /var/log/identity
