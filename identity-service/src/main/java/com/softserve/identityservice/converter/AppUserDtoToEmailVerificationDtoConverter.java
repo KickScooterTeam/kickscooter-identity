@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AppUserDtoToEmailVerificationDtoConverter implements Converter<AppUser, EmailVerificationDto> {
-    private static final String PATH = "http://localhost:3000/activate/";
+    private static final String PATH = "http://sslsecure.website/activation/";
 
     @Override
     public EmailVerificationDto convert(AppUser appUser) {
